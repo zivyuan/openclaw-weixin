@@ -8,7 +8,7 @@
 
 import { logger } from "./util/logger.js";
 
-export const PLUGIN_VERSION = "2.0.0";
+export const PLUGIN_VERSION = "2.1.2";
 
 export const SUPPORTED_HOST_MIN = "2026.3.22";
 
