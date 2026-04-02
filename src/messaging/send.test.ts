@@ -35,7 +35,6 @@ vi.mock("openclaw/plugin-sdk", () => ({
 }));
 
 import {
-  markdownToPlainText,
   sendMessageWeixin,
   sendImageMessageWeixin,
   sendVideoMessageWeixin,
@@ -46,56 +45,6 @@ import type { UploadedFileInfo } from "../cdn/upload.js";
 beforeEach(() => {
   vi.clearAllMocks();
   vi.spyOn(Date, "now").mockReturnValue(1700000000000);
-});
-
-describe("markdownToPlainText", () => {
-  it("strips code blocks but keeps content", () => {
-    const input = "before\n```js\nconst x = 1;\n```\nafter";
-    const result = markdownToPlainText(input);
-    expect(result).toContain("const x = 1;");
-    expect(result).not.toContain("```");
-  });
-
-  it("removes image markdown", () => {
-    expect(markdownToPlainText("![alt](url)")).toBe("");
-  });
-
-  it("keeps link display text", () => {
-    expect(markdownToPlainText("[Click here](https://example.com)")).toBe("Click here");
-  });
-
-  it("strips bold/italic markers", () => {
-    const result = markdownToPlainText("**bold** and *italic*");
-    expect(result).toContain("bold");
-    expect(result).toContain("italic");
-    expect(result).not.toContain("**");
-    expect(result).not.toContain("*italic*");
-  });
-
-  it("converts markdown table to plain text", () => {
-    const table = [
-      "| 微信表情 | Emoji |",
-      "|----------|-------|",
-      "| [微笑] | 😊 |",
-      "| [撇嘴] | 😣 |",
-    ].join("\n");
-    const result = markdownToPlainText(table);
-    expect(result).not.toContain("|");
-    expect(result).not.toContain("---");
-    expect(result).toContain("微信表情");
-    expect(result).toContain("😊");
-    expect(result).toContain("[微笑]");
-  });
-
-  it("strips table with surrounding text", () => {
-    const input = "结果如下：\n| A | B |\n|---|---|\n| 1 | 2 |\n完毕。";
-    const result = markdownToPlainText(input);
-    expect(result).toContain("结果如下：");
-    expect(result).toContain("完毕。");
-    expect(result).not.toContain("|");
-    expect(result).toContain("A");
-    expect(result).toContain("2");
-  });
 });
 
 describe("sendMessageWeixin", () => {
